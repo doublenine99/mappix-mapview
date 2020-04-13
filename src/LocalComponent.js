@@ -1,20 +1,19 @@
 /*
  * @Author: your name
- * @Date: 2020-04-10 19:21:15
- * @LastEditTime: 2020-04-12 19:05:36
+ * @Date: 2020-04-12 19:05:17
+ * @LastEditTime: 2020-04-12 19:08:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: \mapviewReact\src\DropboxComponent.js
+ * @FilePath: \mapviewReact\src\LocalComponent.js
  */
 
+
 import React from 'react';
-import DropboxChooser from 'react-dropbox-chooser';
-// import { user_db } from './firebase.js';
 import * as firebase from './firebase.js';
 // var exiftool = require('exiftool-wrapper');
 import * as exiftool from 'exiftool-wrapper';
 
-export default class DropboxComponent extends React.Component {
+export default class LocalComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,16 +27,17 @@ export default class DropboxComponent extends React.Component {
     // upload the user selected images to firebase storage
     // TODO: authentication rule for storage
     uploadDropboxImage = async (imageURL, thumbnailURL, imageName) => {
-        const thumbnailResponse = await fetch(thumbnailURL);
-        const thumbnailblob = await thumbnailResponse.blob();
-        const thumbnailLocationRef = firebase.storage.ref('users/' + String(this.state.user_id) + '/dropboxThumbnail/' + String(imageName));
+        // const thumbnailResponse = await fetch(thumbnailURL);
+        // const thumbnailblob = await thumbnailResponse.blob();
 
+        let localfile = null;
+        const thumbnailLocationRef = firebase.storage.ref('users/' + String(this.state.user_id) + '/dropboxThumbnail/' + String(imageName));
         thumbnailLocationRef
-            .put(thumbnailblob)
+            .put(localfile)
             .then((result) => {
                 //Get URL and store to pass
                 thumbnailLocationRef.getDownloadURL().then((url) => {
-                    firebase.user_db.doc(this.state.user_id).collection('dropbox').doc(imageName)
+                    firebase.user_db.doc(this.state.user_id).collection('local').doc(imageName)
                         .update({ thumbnail: String(url) });
                 });
             });
@@ -46,14 +46,14 @@ export default class DropboxComponent extends React.Component {
         // TODO: fetch meta data from blob
         const meta = exiftool.metadataSync({ source: blob });
         console.log(meta)
-        const imagedLocationRef = firebase.storage.ref('users/' + String(this.state.user_id) + '/dropbox/' + String(imageName));
+        const imagedLocationRef = firebase.storage.ref('users/' + String(this.state.user_id) + '/local/' + String(imageName));
         console.log(blob)
         imagedLocationRef
             .put(blob)
             .then((result) => {
                 //Get URL and store to pass
                 imagedLocationRef.getDownloadURL().then((url) => {
-                    firebase.user_db.doc(this.state.user_id).collection('dropbox').doc(imageName)
+                    firebase.user_db.doc(this.state.user_id).collection('local').doc(imageName)
                         .update({ imageLink: String(url) });
                 });
             });
@@ -67,7 +67,7 @@ export default class DropboxComponent extends React.Component {
                 // console.log("select folder preview link is", image.link)
             }
             else if (image && !image.isDir) {
-                firebase.user_db.doc(this.state.user_id).collection('dropbox').doc(image.name)
+                firebase.user_db.doc(this.state.user_id).collection('local').doc(image.name)
                     .set({
                         name: image.name,
                     });
@@ -84,19 +84,24 @@ export default class DropboxComponent extends React.Component {
     }
     render() {
         return (
-            // folder select and direct link cannot be enable together
-            <DropboxChooser
-                appKey={'qum9scemxpdx70s'}
-                success={files => this.onSuccess(files)}
-                // cancel={() => this.onCancel()}
-                multiselect={true}
-                // folderselect={true}
-                linkType={"direct"} // or "direct"
-                // extensions={['.jpeg', '.raw', '.png', '.jpg']}
-                extensions={['images']}
-            >
-                <div className="dropbox-button">Upload from Dropbox</div>
-            </DropboxChooser>
+
+
+            <div>
+                
+            </div>
+            // // folder select and direct link cannot be enable together
+            // <DropboxChooser
+            //     appKey={'qum9scemxpdx70s'}
+            //     success={files => this.onSuccess(files)}
+            //     // cancel={() => this.onCancel()}
+            //     multiselect={true}
+            //     // folderselect={true}
+            //     linkType={"direct"} // or "direct"
+            //     // extensions={['.jpeg', '.raw', '.png', '.jpg']}
+            //     extensions={['images']}
+            // >
+            //     <div className="dropbox-button">Upload from Dropbox</div>
+            // </DropboxChooser>
         )
     }
 
