@@ -6,6 +6,7 @@
     "@uploadcare/react-widget": "^1.2.5",
     "dropbox": "^4.0.30",
     "dropbox-v2-api": "^2.4.16",
+    "exiftool-wrapper": "^1.0.4",
     "firebase": "^7.14.0",
     "fs": "0.0.1-security",
     "isomorphic-fetch": "^2.2.1",
