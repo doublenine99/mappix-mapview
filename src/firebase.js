@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-04-11 23:22:13
- * @LastEditTime: 2020-04-12 16:04:08
+ * @LastEditTime: 2020-04-13 20:15:00
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \mapviewReact\firebase.js
@@ -27,6 +27,7 @@ const db = firestore();
 // // export const koiSushiRestaurant = db.collection("restaurants").doc("koisushi");
 export const user_db = db.collection("users");
 export const storage = firebase.storage();
+export const GeoPoint= firebase.firestore.GeoPoint;
 
 
 

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-04-10 18:14:50
- * @LastEditTime: 2020-04-12 19:09:41
+ * @LastEditTime: 2020-04-13 00:05:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \mapviewReact\src\index.js
@@ -11,8 +11,12 @@ import ReactDOM from 'react-dom';
 import mapboxgl from 'mapbox-gl';
 // import { Widget } from "@uploadcare/react-widget";
 import DropboxComponent from './DropboxComponent';
+import DropboxAPI from './DropboxAPI';
 import LocalComponent from './LocalComponent';
 import * as firebase from './firebase.js';
+
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoieWNsaSIsImEiOiJjajV3dThzYmQwMHBiMnhwZ2I1N2RvNjViIn0.d3TSyIbtv9B7VwxZfuf63Q';
 
@@ -54,23 +58,13 @@ class Application extends React.Component {
     fetchImagesFromDropbox(user_id) {
         let query = firebase.user_db.doc(user_id).collection('dropbox');
         query.onSnapshot(querySnapshot => {
-            console.log(`Received query snapshot of size ${querySnapshot.size}`);
+            // console.log(`Received query snapshot of size ${querySnapshot.size}`);
             const all_images = querySnapshot.docs.map(doc => doc.data());
-            console.log(all_images);
+            // console.log(all_images);
             this.setState({ dropbox_images: all_images })
         }, err => {
             console.log(`Encountered error: ${err}`);
         });
-        // firebase.user_db.doc(user_id).collection('dropbox')
-        //     .get()
-        //     .then(snapshot => {
-        //         const all_images = snapshot.docs.map(doc => doc.data());
-        //         console.log(all_images);
-        //         this.setState({ dropbox_images: all_images })
-        //     })
-        //     .catch((err) => {
-        //         console.log('Error fetching images from dropbox', err);
-        //     });
 
     }
 
@@ -83,6 +77,16 @@ class Application extends React.Component {
                 <div className='sidebarStyle'>
                     <div>Longitude: {this.state.lng} | Latitude: {this.state.lat} | Zoom: {this.state.zoom}</div>
                     <button>  <DropboxComponent /></button>
+                    {/* <button>  <DropboxAPI /></button> */}
+                    <IconButton
+                        onClick={() => (<DropboxAPI />)}
+                        // edge="start"
+                        // // className={classes.menuButton}
+                        color="inherit"
+                    // aria-label="open drawer"
+                    >
+                        <MenuIcon />
+                    </IconButton>
                     {/* <button> </LocalComponent></button> */}
                     <img
                         src={this.state.dropbox_images[this.state.dropbox_images.length - 1] ? this.state.dropbox_images[this.state.dropbox_images.length - 1].thumbnail : null}
